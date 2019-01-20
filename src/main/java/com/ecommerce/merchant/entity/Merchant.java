@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Merchant {
@@ -14,6 +15,16 @@ public class Merchant {
     private String name;
     @Email(message = "Invalid email address!")
     private String emailId;
+    @Size(min = 8, message = "Password should be atleast 8 characters long!")
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Merchant() {
     }

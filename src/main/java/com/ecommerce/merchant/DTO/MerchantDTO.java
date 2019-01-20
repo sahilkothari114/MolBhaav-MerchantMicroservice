@@ -4,8 +4,18 @@ public class MerchantDTO {
     private String merchantId;
     private String name;
     private String emailId;
+    private  String password;
+
 
     public MerchantDTO() {
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getMerchantId() {

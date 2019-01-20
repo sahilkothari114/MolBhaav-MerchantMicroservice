@@ -52,6 +52,4 @@ public class MerchantController {
         }
         return merchantDTOList;
     }
-
-
 }
