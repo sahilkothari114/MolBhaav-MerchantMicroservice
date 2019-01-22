@@ -48,6 +48,8 @@ public class ProductMerchantController {
             merchantPriceQuantityDTO.setPrice(productMerchant.getPrice());
             merchantPriceQuantityDTO.setQuantity(productMerchant.getQuantity());
             merchantPriceQuantityDTO.setMerchantId(productMerchant.getMerchant().getMerchantId());
+            merchantPriceQuantityDTO.setRank(productMerchant.getRank());
+            merchantPriceQuantityDTO.setRating(productMerchant.getRating());
             productMerchantEmbeddedDTO.add(merchantPriceQuantityDTO);
         }
         return productMerchantEmbeddedDTO;
@@ -92,14 +94,12 @@ public class ProductMerchantController {
     }
 
     @RequestMapping(value = "/reduceQuantity", method = RequestMethod.PUT)
-    public ResponseEntity<Boolean> reduceQuantity(@RequestBody Map<String,Integer> productList){
-        for (String string:productList.keySet()) {
-            int quantity = productMerchantService.findOne(string).getQuantity();
-            ProductMerchant productMerchant= productMerchantService.findOne(string);
-            productMerchant.setQuantity(productMerchant.getQuantity()-productList.get(string));
-            productMerchantService.save(productMerchant);
+    public void reduceQuantity(@RequestBody List<com.ecommerce.merchant.DTO.order.ProductDTO> productList){
+        for (com.ecommerce.merchant.DTO.order.ProductDTO productDTO:productList) {
+            ProductMerchant productMerchant1 = productMerchantService.findOne(productDTO.getProductId()+"-"+productDTO.getMerchantId());
+            productMerchant1.setQuantity(productMerchant1.getQuantity()-productDTO.getQuantity());
+            productMerchantService.save(productMerchant1);
         }
-        return new ResponseEntity<>(true,HttpStatus.OK);
     }
 
 }

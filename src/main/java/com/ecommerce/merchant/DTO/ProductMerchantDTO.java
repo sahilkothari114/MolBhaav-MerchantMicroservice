@@ -6,6 +6,24 @@ public class ProductMerchantDTO {
     private String productId;
     private double price;
     private int quantity;
+    private int rank;
+    private double rating;
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
 
     public ProductMerchantDTO() {
     }

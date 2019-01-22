@@ -7,8 +7,18 @@ public class MerchantPriceQuantityDTO {
     private double price;
     private int quantity;
     private int rank;
+    private double rating;
+
 
     public MerchantPriceQuantityDTO() {
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public String getMerchantId() {
