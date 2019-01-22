@@ -21,14 +21,14 @@ public class ProductMerchant {
     private double price;
     @NotNull
     private int quantity;
-    private int rank;
+    private double rank;
     private double rating;
 
-    public int getRank() {
+    public double getRank() {
         return rank;
     }
 
-    public void setRank(int rank) {
+    public void setRank(double rank) {
         this.rank = rank;
     }
 

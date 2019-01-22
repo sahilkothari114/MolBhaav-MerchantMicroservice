@@ -1,5 +1,8 @@
 package com.ecommerce.merchant.repository;
 
+import com.ecommerce.merchant.DTO.algorithm.GroupByMerchantId;
+import com.ecommerce.merchant.DTO.algorithm.GroupByProductId;
+import com.ecommerce.merchant.entity.Merchant;
 import com.ecommerce.merchant.entity.ProductMerchant;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -19,4 +22,20 @@ public interface ProductMerchantRepository extends CrudRepository<ProductMerchan
     @Query("SELECT MAX(pm.price) FROM ProductMerchant pm WHERE pm.productId = ?1")
     public double maxPriceByProductId(String productId);
 
+//    @Query("SELECT pm.productId, SUM(pm.price), MIN(pm.price), MAX(pm.price) FROM ProductMerchant pm GROUP BY pm.productId")
+//    public List<GroupByProductId> groupByProductId();
+
+    @Query("SELECT pm.merchant, COUNT(pm.productId), AVG(pm.rating) FROM ProductMerchant pm GROUP BY pm.merchant")
+    public List<GroupByMerchantId> groupingByMerchant();
+
+    public List<ProductMerchant> findByMerchant(Merchant merchant);
+
+    @Query("UPDATE ProductMerchant pm SET pm.rank = ?1 WHERE pm.productMerchantId = ?2")
+    public void generateRank(double rank, String productMerchantId);
+
+    @Query("SELECT MIN(pm.quantity) FROM ProductMerchant pm WHERE pm.productId = ?1")
+    public int minStockByProductId(String productId);
+
+    @Query("SELECT MAX(pm.quantity) FROM ProductMerchant pm WHERE pm.productId = ?1")
+    public int maxStockByProductId(String productId);
 }

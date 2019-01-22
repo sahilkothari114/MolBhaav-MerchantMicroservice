@@ -6,7 +6,7 @@ public class MerchantPriceQuantityDTO {
     private String emailId;
     private double price;
     private int quantity;
-    private int rank;
+    private double rank;
     private double rating;
 
 
@@ -29,11 +29,11 @@ public class MerchantPriceQuantityDTO {
         this.merchantId = merchantId;
     }
 
-    public int getRank() {
+    public double getRank() {
         return rank;
     }
 
-    public void setRank(int rank) {
+    public void setRank(double rank) {
         this.rank = rank;
     }
 
