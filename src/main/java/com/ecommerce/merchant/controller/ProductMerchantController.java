@@ -94,7 +94,7 @@ public class ProductMerchantController {
         return new ResponseEntity<String>(productMerchant1.getProductMerchantId(),HttpStatus.CREATED);
     }
     @CrossOrigin("*")
-    @RequestMapping(value = "/reduceQuantity", method = RequestMethod.PUT)
+    @RequestMapping(value = "/reduceQuantity", method = RequestMethod.POST)
     public List<ProductOrderDTO> reduceQuantity(@RequestBody List<ProductOrderDTO> productList){
         List<ProductOrderDTO> productOrderDTOList = new ArrayList<>();
         for (ProductOrderDTO productOrderDTO:productList) {
