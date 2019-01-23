@@ -2,6 +2,7 @@ package com.ecommerce.merchant.controller;
 
 import com.ecommerce.merchant.DTO.*;
 import com.ecommerce.merchant.DTO.order.ProductOrderDTO;
+import com.ecommerce.merchant.DTO.order.ProductQantityCheckDTO;
 import com.ecommerce.merchant.DTO.order.RatingDTO;
 import com.ecommerce.merchant.entity.Merchant;
 import com.ecommerce.merchant.entity.ProductMerchant;
@@ -95,9 +96,9 @@ public class ProductMerchantController {
     }
     @CrossOrigin("*")
     @RequestMapping(value = "/reduceQuantity", method = RequestMethod.POST)
-    public List<ProductOrderDTO> reduceQuantity(@RequestBody List<ProductOrderDTO> productList){
-        List<ProductOrderDTO> productOrderDTOList = new ArrayList<>();
-        for (ProductOrderDTO productOrderDTO:productList) {
+    public List<ProductQantityCheckDTO> reduceQuantity(@RequestBody List<ProductQantityCheckDTO> productList){
+        List<ProductQantityCheckDTO> productOrderDTOList = new ArrayList<>();
+        for (ProductQantityCheckDTO productOrderDTO:productList) {
             ProductMerchant productMerchant1 = productMerchantService.findOne(productOrderDTO.getProductId()+"-"+productOrderDTO.getMerchantId());
             if (productMerchant1.getQuantity()<productOrderDTO.getQuantity()){
                 break;
