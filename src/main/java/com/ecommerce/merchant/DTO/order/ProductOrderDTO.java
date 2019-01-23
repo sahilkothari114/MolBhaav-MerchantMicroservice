@@ -4,7 +4,7 @@ import com.ecommerce.merchant.DTO.StaticAttributeDTO;
 
 import java.util.List;
 
-public class ProductDTO {
+public class ProductOrderDTO {
     private String productId;
     private String productName;
     private String productImageUrl;
@@ -17,7 +17,7 @@ public class ProductDTO {
     private String merchantId;
     private int quantity;
 
-    public ProductDTO() {
+    public ProductOrderDTO() {
     }
 
     public String getProductId() {

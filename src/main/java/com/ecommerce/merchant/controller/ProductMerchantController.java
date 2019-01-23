@@ -1,10 +1,10 @@
 package com.ecommerce.merchant.controller;
 
 import com.ecommerce.merchant.DTO.*;
+import com.ecommerce.merchant.DTO.order.ProductOrderDTO;
 import com.ecommerce.merchant.DTO.order.RatingDTO;
 import com.ecommerce.merchant.entity.Merchant;
 import com.ecommerce.merchant.entity.ProductMerchant;
-import com.ecommerce.merchant.repository.ProductMerchantRepository;
 import com.ecommerce.merchant.service.MerchantService;
 import com.ecommerce.merchant.service.ProductMerchantService;
 import com.ecommerce.merchant.util.Constant;
@@ -14,13 +14,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/productMerchants")
@@ -96,12 +95,18 @@ public class ProductMerchantController {
     }
     @CrossOrigin("*")
     @RequestMapping(value = "/reduceQuantity", method = RequestMethod.PUT)
-    public void reduceQuantity(@RequestBody List<com.ecommerce.merchant.DTO.order.ProductDTO> productList){
-        for (com.ecommerce.merchant.DTO.order.ProductDTO productDTO:productList) {
-            ProductMerchant productMerchant1 = productMerchantService.findOne(productDTO.getProductId()+"-"+productDTO.getMerchantId());
-            productMerchant1.setQuantity(productMerchant1.getQuantity()-productDTO.getQuantity());
+    public List<ProductOrderDTO> reduceQuantity(@RequestBody List<ProductOrderDTO> productList){
+        List<ProductOrderDTO> productOrderDTOList = new ArrayList<>();
+        for (ProductOrderDTO productOrderDTO:productList) {
+            ProductMerchant productMerchant1 = productMerchantService.findOne(productOrderDTO.getProductId()+"-"+productOrderDTO.getMerchantId());
+            if (productMerchant1.getQuantity()>productOrderDTO.getQuantity()){
+                break;
+            }
+            productMerchant1.setQuantity(productMerchant1.getQuantity()-productOrderDTO.getQuantity());
             productMerchantService.save(productMerchant1);
+            productOrderDTOList.add(productOrderDTO);
         }
+        return productOrderDTOList;
     }
 
     @CrossOrigin("*")
