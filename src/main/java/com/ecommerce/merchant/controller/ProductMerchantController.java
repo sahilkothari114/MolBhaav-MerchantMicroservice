@@ -127,6 +127,12 @@ public class ProductMerchantController {
         return productMerchantDTOList1;
     }
     @CrossOrigin("*")
+    @RequestMapping(value = "/",method = RequestMethod.GET)
+    public List<ProductMerchant> findAll(){
+        LOGGER.info("Received GET request for findAll ProductMerchantDTO");
+        return productMerchantService.findAll();
+    }
+    @CrossOrigin("*")
     @RequestMapping(value = "/addRating", method = RequestMethod.POST)
     public ResponseEntity<String> addrating(RatingDTO rating){
         ProductMerchant productMerchant = productMerchantService.findByProductIdAndMerchantId(rating.getProductId(),rating.getMerchantId());
