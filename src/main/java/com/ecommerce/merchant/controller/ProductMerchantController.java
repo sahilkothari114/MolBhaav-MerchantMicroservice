@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/productMerchants")
 public class ProductMerchantController {
@@ -33,7 +33,7 @@ public class ProductMerchantController {
     MerchantService merchantService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MerchantController.class);
-
+    @CrossOrigin("*")
     @RequestMapping(value = "/getByProductId/{productId}", method = RequestMethod.GET)
     public ProductMerchantEmbeddedDTO getByProductId(@PathVariable("productId") String productId){
         LOGGER.info("Received GET request for getByProductId:" +productId);
@@ -56,7 +56,7 @@ public class ProductMerchantController {
         }
         return productMerchantEmbeddedDTO;
     }
-
+    @CrossOrigin("*")
     @RequestMapping(value = "/getByProductList", method = RequestMethod.POST)
     public List<ProductMerchantDTO> getByProductList(@RequestBody List<ProductDTO> productDTOList){
         LOGGER.info("Received POST request for getByProductList" );
@@ -70,7 +70,7 @@ public class ProductMerchantController {
         }
         return productMerchantDTOList;
     }
-
+    @CrossOrigin("*")
     @RequestMapping(value = "/getCountByProductList", method = RequestMethod.POST)
     public List<ProductDTO> getCountByProductList(@RequestBody List<ProductDTO> productDTOList){
         LOGGER.info("Received POST request for getCountByProductId:" );
@@ -84,7 +84,7 @@ public class ProductMerchantController {
         }
         return productDTOListWithCount;
     }
-
+    @CrossOrigin("*")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<String> addProductMerchant(@RequestBody  ProductMerchantDTO productMerchantDTO){
         ProductMerchant productMerchant = new ProductMerchant();
@@ -94,7 +94,7 @@ public class ProductMerchantController {
         ProductMerchant productMerchant1= productMerchantService.save(productMerchant);
         return new ResponseEntity<String>(productMerchant1.getProductMerchantId(),HttpStatus.CREATED);
     }
-
+    @CrossOrigin("*")
     @RequestMapping(value = "/reduceQuantity", method = RequestMethod.PUT)
     public void reduceQuantity(@RequestBody List<com.ecommerce.merchant.DTO.order.ProductDTO> productList){
         for (com.ecommerce.merchant.DTO.order.ProductDTO productDTO:productList) {
@@ -104,7 +104,7 @@ public class ProductMerchantController {
         }
     }
 
-
+    @CrossOrigin("*")
     @RequestMapping(value = "/getByProductMerchantList", method = RequestMethod.POST)
     public List<ProductMerchantDTO> getByProducMerchanttList(@RequestBody List<ProductMerchantDTO> productMerchantDTOList){
         LOGGER.info("Received POST request for ProductMerchantDTO" );
@@ -121,6 +121,7 @@ public class ProductMerchantController {
         }
         return productMerchantDTOList1;
     }
+    @CrossOrigin("*")
     @RequestMapping(value = "/addRating", method = RequestMethod.POST)
     public ResponseEntity<String> addrating(RatingDTO rating){
         ProductMerchant productMerchant = productMerchantService.findByProductIdAndMerchantId(rating.getProductId(),rating.getMerchantId());

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@CrossOrigin("*")
 @RestController
 @RequestMapping(value = "/merchants")
 public class MerchantController {
@@ -21,7 +21,7 @@ public class MerchantController {
     private MerchantService merchantService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MerchantController.class);
-
+    @CrossOrigin("*")
     @RequestMapping(value = "/get/{merchantId}",method = RequestMethod.GET)
     public MerchantDTO getMerchant(@PathVariable("merchantId") String merchantId){
         LOGGER.info("Received a GET request for MerchantId:" +merchantId);
@@ -30,7 +30,7 @@ public class MerchantController {
         BeanUtils.copyProperties(merchant,merchantDTO);
         return merchantDTO;
     }
-
+    @CrossOrigin("*")
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ResponseEntity<MerchantDTO> addMerchant(@RequestBody MerchantDTO merchantDTO){
         LOGGER.info("Received a POST request for addMerchant");
@@ -40,7 +40,7 @@ public class MerchantController {
         BeanUtils.copyProperties(merchant,merchantDTO);
         return new ResponseEntity<MerchantDTO>(merchantDTO,HttpStatus.CREATED);
     }
-
+    @CrossOrigin("*")
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public List<MerchantDTO> getAllMerchant(){
         LOGGER.info("Received a GET request for GetAllMerchant");
