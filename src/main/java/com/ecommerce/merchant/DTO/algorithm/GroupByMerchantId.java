@@ -3,23 +3,20 @@ package com.ecommerce.merchant.DTO.algorithm;
 import com.ecommerce.merchant.entity.Merchant;
 
 public class GroupByMerchantId {
-    private Merchant merchant;
+    private String merchantId;
     private int productSold;
     private double merchantRating;
 
-    public GroupByMerchantId(Merchant merchant, int productSold, double merchantRating) {
-        this.merchant = merchant;
-        this.productSold = productSold;
+    public GroupByMerchantId(String merchantId, long productSold, double merchantRating) {
+        this.merchantId = merchantId;
+        this.productSold = (int) productSold;
         this.merchantRating = merchantRating;
     }
 
-    public Merchant getMerchant() {
+    public String getMerchantId() { return merchantId; }
 
-        return merchant;
-    }
-
-    public void setMerchant(Merchant merchant) {
-        this.merchant = merchant;
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
     }
 
     public int getProductSold() {
