@@ -23,9 +23,18 @@ public class ProductMerchant {
     private int quantity;
     private double rank;
     private double rating;
+    private int ratingCount;
 
     public double getRank() {
         return rank;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
     }
 
     public void setRank(double rank) {

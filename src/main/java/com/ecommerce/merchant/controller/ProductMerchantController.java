@@ -1,6 +1,7 @@
 package com.ecommerce.merchant.controller;
 
 import com.ecommerce.merchant.DTO.*;
+import com.ecommerce.merchant.DTO.order.RatingDTO;
 import com.ecommerce.merchant.entity.Merchant;
 import com.ecommerce.merchant.entity.ProductMerchant;
 import com.ecommerce.merchant.repository.ProductMerchantRepository;
@@ -50,6 +51,7 @@ public class ProductMerchantController {
             merchantPriceQuantityDTO.setMerchantId(productMerchant.getMerchant().getMerchantId());
             merchantPriceQuantityDTO.setRank(productMerchant.getRank());
             merchantPriceQuantityDTO.setRating(productMerchant.getRating());
+            merchantPriceQuantityDTO.setRatingCount(productMerchant.getRatingCount());
             productMerchantEmbeddedDTO.add(merchantPriceQuantityDTO);
         }
         return productMerchantEmbeddedDTO;
@@ -118,5 +120,18 @@ public class ProductMerchantController {
             productMerchantDTOList1.add(productMerchantDTO1);
         }
         return productMerchantDTOList1;
+    }
+    @RequestMapping(value = "/addRating", method = RequestMethod.POST)
+    public ResponseEntity<String> addrating(RatingDTO rating){
+        ProductMerchant productMerchant = productMerchantService.findByProductIdAndMerchantId(rating.getProductId(),rating.getMerchantId());
+        productMerchant.setRating(productMerchant.getRating()+rating.getRating());
+        if (productMerchant.getRatingCount()==0){
+            LOGGER.info("rating count is 0.");
+        }
+        productMerchant.setRatingCount(productMerchant.getRatingCount()+1);
+        LOGGER.info("rating count is ."+productMerchant.getRatingCount());
+
+        productMerchantService.save(productMerchant);
+        return new ResponseEntity<String>(productMerchant.getProductMerchantId(),HttpStatus.CREATED);
     }
 }

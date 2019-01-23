@@ -8,9 +8,17 @@ public class MerchantPriceQuantityDTO {
     private int quantity;
     private double rank;
     private double rating;
-
+    private int ratingCount;
 
     public MerchantPriceQuantityDTO() {
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
     }
 
     public double getRating() {
