@@ -147,6 +147,11 @@ public class ProductMerchantServiceImpl implements ProductMerchantService {
             }
         }
     }
+
+    @Override
+    public ProductMerchant findByProductIdAndMerchantId(String productId, String merchantId) {
+        return productMerchantRepository.findByProductIdAndMerchant_MerchantId(productId,merchantId);
+    }
 //    @Scheduled(fixedRate = 60*60*1000, initialDelay = 5000)
 //    public void test(){
 //        List<GroupByMerchantId> groupByMerchantIdList = productMerchantRepository.groupingByMerchant();

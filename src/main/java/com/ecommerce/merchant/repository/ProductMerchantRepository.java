@@ -12,7 +12,10 @@ import java.util.List;
 
 @Repository
 public interface ProductMerchantRepository extends CrudRepository<ProductMerchant,String> {
+
     public List<ProductMerchant> findByProductId(String productId);
+
+    public ProductMerchant findByProductIdAndMerchant_MerchantId(String productId, String merchantId);
 
     public int countByProductId(String productId);
 

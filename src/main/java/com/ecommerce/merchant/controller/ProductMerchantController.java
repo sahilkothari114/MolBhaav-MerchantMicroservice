@@ -57,7 +57,7 @@ public class ProductMerchantController {
 
     @RequestMapping(value = "/getByProductList", method = RequestMethod.POST)
     public List<ProductMerchantDTO> getByProductList(@RequestBody List<ProductDTO> productDTOList){
-        LOGGER.info("Received POST request for getByProductId:" );
+        LOGGER.info("Received POST request for getByProductList" );
         List<ProductMerchantDTO> productMerchantDTOList = new ArrayList<>();
         for (ProductDTO productDTO: productDTOList) {
             for (ProductMerchant productMerchant : productMerchantService.findByProductId(productDTO.getProductId())) {
@@ -102,4 +102,21 @@ public class ProductMerchantController {
         }
     }
 
+
+    @RequestMapping(value = "/getByProductMerchantList", method = RequestMethod.POST)
+    public List<ProductMerchantDTO> getByProducMerchanttList(@RequestBody List<ProductMerchantDTO> productMerchantDTOList){
+        LOGGER.info("Received POST request for ProductMerchantDTO" );
+        List<ProductMerchantDTO> productMerchantDTOList1 = new ArrayList<>();
+        for (ProductMerchantDTO productMerchantDTO: productMerchantDTOList) {
+            ProductMerchant productMerchant = productMerchantService.findByProductIdAndMerchantId(productMerchantDTO.getProductId(),productMerchantDTO.getMerchant().getMerchantId());
+            ProductMerchantDTO productMerchantDTO1= new ProductMerchantDTO();
+            Merchant merchant = productMerchant.getMerchant();
+            MerchantDTO merchantDTO = new MerchantDTO();
+            BeanUtils.copyProperties(productMerchant,productMerchantDTO1);
+            BeanUtils.copyProperties(merchant,merchantDTO);
+            productMerchantDTO1.setMerchant(merchantDTO);
+            productMerchantDTOList1.add(productMerchantDTO1);
+        }
+        return productMerchantDTOList1;
+    }
 }

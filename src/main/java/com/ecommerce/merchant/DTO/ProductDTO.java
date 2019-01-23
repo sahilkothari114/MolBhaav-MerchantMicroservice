@@ -16,27 +16,21 @@ public class ProductDTO {
     public double getLowestPrice() {
         return lowestPrice;
     }
-
     public void setLowestPrice(double lowestPrice) {
         this.lowestPrice = lowestPrice;
     }
-
     public double getHighestPrice() {
         return highestPrice;
     }
-
     public void setHighestPrice(double highestPrice) {
         this.highestPrice = highestPrice;
     }
-
     public int getMerchantCount() {
         return merchantCount;
     }
-
     public void setMerchantCount(int merchantCount) {
         this.merchantCount = merchantCount;
     }
-
     public String getProductId() {
         return productId;
     }

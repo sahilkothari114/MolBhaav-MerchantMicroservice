@@ -15,4 +15,6 @@ public interface ProductMerchantService {
     double maxPriceByProductId(String productId);
     double minPriceByProductId(String productId);
     void calculateMerchantRank();
+    ProductMerchant findByProductIdAndMerchantId(String productId, String merchantId);
+
 }
