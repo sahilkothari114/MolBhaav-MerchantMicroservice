@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -70,8 +71,9 @@ public class ProductMerchantServiceImpl implements ProductMerchantService {
         return productMerchantRepository.minPriceByProductId(productId);
     }
 
+    @Transactional
     @Override
-    //@Scheduled(fixedRate = 60*60*1000, initialDelay = 5000)
+    @Scheduled(fixedRate = 60*60*1000, initialDelay = 5000)
     public void calculateMerchantRank() {
         List<GroupByMerchantId> groupByMerchantIds = productMerchantRepository.groupingByMerchant();
         //List<GroupByProductId> groupByProductIds = productMerchantRepository.groupByProductId();
@@ -80,48 +82,59 @@ public class ProductMerchantServiceImpl implements ProductMerchantService {
         List<MerchantOrders> merchantOrdersList = new ArrayList<>();
         for (GroupByMerchantId groupByMerchantId : groupByMerchantIds) {
             MerchantOrders merchantOrders = new MerchantOrders();
-            merchantOrders.setMerchantId(groupByMerchantId.getMerchant().getMerchantId());
+            merchantOrders.setMerchantId(groupByMerchantId.getMerchantId());
             merchantOrdersList.add(merchantOrders);
         }
 
-        //TODO:PUT URL IN
-        final String uri = "  ";
+//        //TODO:PUT URL IN
+//        final String uri = "  ";
+//
+//        //MAKING CALL
+//        RestTemplate restTemplate = new RestTemplate();
+//        ObjectMapper mapper = new ObjectMapper();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Content-Type", "application/json");
+//        HttpEntity requestEntity = new HttpEntity(merchantOrdersList, headers);
+//        ResponseEntity<?> entityResponse = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, List.class);
+//
+//        //PARSING RESULTS
+//        List ordersMadeList = (List) entityResponse.getBody();
+//        Iterator iterator = ordersMadeList.iterator();
+////        List<MerchantOrders> ordersMade = new ArrayList<>();
+//        HashMap<String, Integer> ordersMade = new HashMap<>();
+//        while (iterator.hasNext()) {
+//            MerchantOrders orderMade = mapper.convertValue(iterator.next(), MerchantOrders.class);
+////            ordersMade.add(orderMade);
+//            ordersMade.put(orderMade.getMerchantId(), orderMade.getOrdersMade());
+//        }
 
-        //MAKING CALL
-        RestTemplate restTemplate = new RestTemplate();
-        ObjectMapper mapper = new ObjectMapper();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-        HttpEntity requestEntity = new HttpEntity(merchantOrdersList, headers);
-        ResponseEntity<?> entityResponse = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, List.class);
 
-        //PARSING RESULTS
-        List ordersMadeList = (List) entityResponse.getBody();
-        Iterator iterator = ordersMadeList.iterator();
-//        List<MerchantOrders> ordersMade = new ArrayList<>();
+
         HashMap<String, Integer> ordersMade = new HashMap<>();
-        while (iterator.hasNext()) {
-            MerchantOrders orderMade = mapper.convertValue(iterator.next(), MerchantOrders.class);
-//            ordersMade.add(orderMade);
-            ordersMade.put(orderMade.getMerchantId(), orderMade.getOrdersMade());
-        }
+        ordersMade.put("5c4781103465d9d6f342c5e2", 10);
+        ordersMade.put("5c478110cf2e30abeef1388f", 15);
+
 
         //Stock Normalizing Prep
         int minOrder = Collections.min(ordersMade.values());
         int maxOrder = Collections.max(ordersMade.values());
 
         for (GroupByMerchantId groupByMerchantId : groupByMerchantIds) {
-            List<ProductMerchant> pmlist = productMerchantRepository.findByMerchant(groupByMerchantId.getMerchant());
+            List<ProductMerchant> pmlist = productMerchantRepository.findByMerchant_MerchantId(groupByMerchantId.getMerchantId());
             for (ProductMerchant productMerchant : pmlist) {
 
                 //Normalize Prices
                 double maxPrice = productMerchantRepository.maxPriceByProductId(productMerchant.getProductId());
                 double minPrice = productMerchantRepository.minPriceByProductId(productMerchant.getProductId());
-                double normalizedPrice = (productMerchant.getPrice() - minPrice) / (maxPrice - minPrice);
+                double normalizedPrice = 1;
+                if(maxPrice != minPrice)
+                    normalizedPrice = (productMerchant.getPrice() - minPrice) / (maxPrice - minPrice);
 
                 //Normalize Orders
-                int ordersMadeToMerchant = ordersMade.get(groupByMerchantId.getMerchant().getMerchantId());
-                double normalizedOrdersMadeToMerchant = (ordersMadeToMerchant - minOrder) / (maxOrder - minOrder);
+                int ordersMadeToMerchant = ordersMade.get(groupByMerchantId.getMerchantId());
+                double normalizedOrdersMadeToMerchant = 1;
+                if(maxOrder!=minOrder)
+                    normalizedOrdersMadeToMerchant = (ordersMadeToMerchant - minOrder) / (maxOrder - minOrder);
 
                 //Normalize Stock
                 int totalProductsByMerchant = groupByMerchantId.getProductSold();
@@ -129,7 +142,9 @@ public class ProductMerchantServiceImpl implements ProductMerchantService {
 
                 int minStock = productMerchantRepository.minStockByProductId(productMerchant.getProductId());
                 int maxStock = productMerchantRepository.maxStockByProductId(productMerchant.getProductId());
-                double normalizedStock = (productMerchant.getQuantity() - minStock) / (maxStock - minStock);
+                double normalizedStock = 1;
+                if(maxStock != minStock)
+                    normalizedStock = (productMerchant.getQuantity() - minStock) / (maxStock - minStock);
 
                 double merchantRating = groupByMerchantId.getMerchantRating();
                 double productRating = productMerchant.getRating();
@@ -156,7 +171,7 @@ public class ProductMerchantServiceImpl implements ProductMerchantService {
 //    public void test(){
 //        List<GroupByMerchantId> groupByMerchantIdList = productMerchantRepository.groupingByMerchant();
 //        for(GroupByMerchantId groupByMerchantId : groupByMerchantIdList){
-//            System.out.println(groupByMerchantId.getMerchant() + " " + groupByMerchantId.getMerchantRating());
+//            System.out.println(groupByMerchantId.getMerchantId());
 //        }
 //    }
 }
