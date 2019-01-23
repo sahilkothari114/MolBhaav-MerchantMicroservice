@@ -99,7 +99,7 @@ public class ProductMerchantController {
         List<ProductOrderDTO> productOrderDTOList = new ArrayList<>();
         for (ProductOrderDTO productOrderDTO:productList) {
             ProductMerchant productMerchant1 = productMerchantService.findOne(productOrderDTO.getProductId()+"-"+productOrderDTO.getMerchantId());
-            if (productMerchant1.getQuantity()>productOrderDTO.getQuantity()){
+            if (productMerchant1.getQuantity()<productOrderDTO.getQuantity()){
                 break;
             }
             productMerchant1.setQuantity(productMerchant1.getQuantity()-productOrderDTO.getQuantity());
