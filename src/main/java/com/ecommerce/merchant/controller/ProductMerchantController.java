@@ -135,7 +135,7 @@ public class ProductMerchantController {
     }
     @CrossOrigin("*")
     @RequestMapping(value = "/addRating", method = RequestMethod.POST)
-    public ResponseEntity<String> addrating(@RequestBody RatingDTO rating){
+    public ResponseEntity<RatingDTO> addrating(@RequestBody RatingDTO rating){
         ProductMerchant productMerchant = productMerchantService.findByProductIdAndMerchantId(rating.getProductId(),rating.getMerchantId());
         productMerchant.setRating(productMerchant.getRating()+rating.getRating());
         if (productMerchant.getRatingCount()==0){
@@ -145,7 +145,7 @@ public class ProductMerchantController {
         LOGGER.info("rating count is ."+productMerchant.getRatingCount());
 
         productMerchantService.save(productMerchant);
-        return new ResponseEntity<String>(productMerchant.getProductMerchantId(),HttpStatus.CREATED);
+        return new ResponseEntity<RatingDTO>(rating,HttpStatus.CREATED);
     }
 
 
