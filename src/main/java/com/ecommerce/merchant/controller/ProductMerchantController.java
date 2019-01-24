@@ -156,7 +156,7 @@ public class ProductMerchantController {
     }
 
     @CrossOrigin("*")
-    @RequestMapping(value = "/findOne{productMerchantId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/findOne{productMerchantId}", method = RequestMethod.GET)
     public ResponseEntity<ProductMerchant> findOneProductMerchant(@PathVariable("productMerchantId") String productMerchantId){
         return new  ResponseEntity<ProductMerchant>(productMerchantService.findOne(productMerchantId),HttpStatus.OK);
     }
