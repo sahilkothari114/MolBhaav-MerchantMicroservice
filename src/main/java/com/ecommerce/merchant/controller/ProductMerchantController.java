@@ -147,4 +147,17 @@ public class ProductMerchantController {
         productMerchantService.save(productMerchant);
         return new ResponseEntity<String>(productMerchant.getProductMerchantId(),HttpStatus.CREATED);
     }
+
+
+    @CrossOrigin("*")
+    @RequestMapping(value = "/delete{productMerchantId}", method = RequestMethod.DELETE)
+    public void deleteProductMerchant(@PathVariable("productMerchantId") String productMerchantId){
+        productMerchantService.delete(productMerchantId);
+    }
+
+    @CrossOrigin("*")
+    @RequestMapping(value = "/findOne{productMerchantId}", method = RequestMethod.DELETE)
+    public ResponseEntity<ProductMerchant> findOneProductMerchant(@PathVariable("productMerchantId") String productMerchantId){
+        return new  ResponseEntity<ProductMerchant>(productMerchantService.findOne(productMerchantId),HttpStatus.OK);
+    }
 }
