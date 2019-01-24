@@ -160,4 +160,15 @@ public class ProductMerchantController {
     public ResponseEntity<ProductMerchant> findOneProductMerchant(@PathVariable("productMerchantId") String productMerchantId){
         return new  ResponseEntity<ProductMerchant>(productMerchantService.findOne(productMerchantId),HttpStatus.OK);
     }
+
+    @CrossOrigin("*")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResponseEntity<String> updateProductMerchant(@RequestBody  ProductMerchantDTO productMerchantDTO){
+        ProductMerchant productMerchant = new ProductMerchant();
+        BeanUtils.copyProperties(productMerchantDTO, productMerchant);
+        Merchant merchant = merchantService.findOne(productMerchantDTO.getMerchant().getMerchantId());
+        productMerchant.setMerchant(merchant);
+        ProductMerchant productMerchant1= productMerchantService.save(productMerchant);
+        return new ResponseEntity<String>(productMerchant1.getProductMerchantId(),HttpStatus.CREATED);
+    }
 }
