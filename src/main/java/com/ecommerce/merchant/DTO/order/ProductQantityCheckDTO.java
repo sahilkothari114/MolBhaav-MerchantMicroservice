@@ -5,8 +5,17 @@ public class ProductQantityCheckDTO {
     private String merchantId;
     private int quantity;
     private double price;
+    private int availableQuantity;
 
     public ProductQantityCheckDTO() {
+    }
+
+    public int getAvailableQuantity() {
+        return availableQuantity;
+    }
+
+    public void setAvailableQuantity(int availableQuantity) {
+        this.availableQuantity = availableQuantity;
     }
 
     public String getProductId() {

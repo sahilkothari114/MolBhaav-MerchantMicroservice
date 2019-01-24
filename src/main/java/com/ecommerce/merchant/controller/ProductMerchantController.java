@@ -105,6 +105,8 @@ public class ProductMerchantController {
             }
             productMerchant1.setQuantity(productMerchant1.getQuantity()-productOrderDTO.getQuantity());
             productMerchantService.save(productMerchant1);
+            productOrderDTO.setPrice(productMerchant1.getPrice());
+            productOrderDTO.setAvailableQuantity(productMerchant1.getQuantity());
             productOrderDTOList.add(productOrderDTO);
         }
         return productOrderDTOList;
