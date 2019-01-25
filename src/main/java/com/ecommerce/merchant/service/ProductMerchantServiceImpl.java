@@ -73,7 +73,7 @@ public class ProductMerchantServiceImpl implements ProductMerchantService {
 
     @Transactional
     @Override
-    @Scheduled(fixedRate = 60*60*1000, initialDelay = 5000)
+//    @Scheduled(fixedRate = 60*60*1000, initialDelay = 5000)
     public void calculateMerchantRank() {
         List<GroupByMerchantId> groupByMerchantIds = productMerchantRepository.groupingByMerchant();
         //List<GroupByProductId> groupByProductIds = productMerchantRepository.groupByProductId();
@@ -86,33 +86,31 @@ public class ProductMerchantServiceImpl implements ProductMerchantService {
             merchantOrdersList.add(merchantOrders);
         }
 
-//        //TODO:PUT URL IN
-//        final String uri = "  ";
-//
-//        //MAKING CALL
-//        RestTemplate restTemplate = new RestTemplate();
-//        ObjectMapper mapper = new ObjectMapper();
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set("Content-Type", "application/json");
-//        HttpEntity requestEntity = new HttpEntity(merchantOrdersList, headers);
-//        ResponseEntity<?> entityResponse = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, List.class);
-//
-//        //PARSING RESULTS
-//        List ordersMadeList = (List) entityResponse.getBody();
-//        Iterator iterator = ordersMadeList.iterator();
-////        List<MerchantOrders> ordersMade = new ArrayList<>();
-//        HashMap<String, Integer> ordersMade = new HashMap<>();
-//        while (iterator.hasNext()) {
-//            MerchantOrders orderMade = mapper.convertValue(iterator.next(), MerchantOrders.class);
-////            ordersMade.add(orderMade);
-//            ordersMade.put(orderMade.getMerchantId(), orderMade.getOrdersMade());
-//        }
+        final String uri = "http://molbhaav-order.herokuapp.com/orders/ordersMade/";
 
+        //MAKING CALL
+        RestTemplate restTemplate = new RestTemplate();
+        ObjectMapper mapper = new ObjectMapper();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        HttpEntity requestEntity = new HttpEntity(merchantOrdersList, headers);
+        ResponseEntity<?> entityResponse = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, List.class);
 
-
+        //PARSING RESULTS
+        List ordersMadeList = (List) entityResponse.getBody();
+        Iterator iterator = ordersMadeList.iterator();
+//        List<MerchantOrders> ordersMade = new ArrayList<>();
         HashMap<String, Integer> ordersMade = new HashMap<>();
-        ordersMade.put("5c4781103465d9d6f342c5e2", 10);
-        ordersMade.put("5c478110cf2e30abeef1388f", 15);
+        while (iterator.hasNext()) {
+            MerchantOrders orderMade = mapper.convertValue(iterator.next(), MerchantOrders.class);
+//            ordersMade.add(orderMade);
+            ordersMade.put(orderMade.getMerchantId(), orderMade.getOrdersMade());
+        }
+
+
+//        HashMap<String, Integer> ordersMade = new HashMap<>();
+//        ordersMade.put("5c4781103465d9d6f342c5e2", 10);
+//        ordersMade.put("5c478110cf2e30abeef1388f", 15);
 
 
         //Stock Normalizing Prep

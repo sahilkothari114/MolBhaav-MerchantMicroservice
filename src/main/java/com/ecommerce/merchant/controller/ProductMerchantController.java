@@ -1,7 +1,7 @@
 package com.ecommerce.merchant.controller;
 
 import com.ecommerce.merchant.DTO.*;
-import com.ecommerce.merchant.DTO.order.ProductOrderDTO;
+import com.ecommerce.merchant.DTO.order.PMDTOForSearch;
 import com.ecommerce.merchant.DTO.order.ProductQantityCheckDTO;
 import com.ecommerce.merchant.DTO.order.RatingDTO;
 import com.ecommerce.merchant.entity.Merchant;
@@ -92,6 +92,17 @@ public class ProductMerchantController {
         Merchant merchant = merchantService.findOne(productMerchantDTO.getMerchant().getMerchantId());
         productMerchant.setMerchant(merchant);
         ProductMerchant productMerchant1= productMerchantService.save(productMerchant);
+
+        //API CALL TO SEARCH
+        final String uri="http://localhost:8080/product/updateProductPricing";
+        RestTemplate restTemplate = new RestTemplate();
+        PMDTOForSearch PMDTOForSearch = new PMDTOForSearch();
+        PMDTOForSearch.setProductId(productMerchant1.getProductId());
+        PMDTOForSearch.setOption(1);
+        PMDTOForSearch.setLowestPrice(productMerchantService.minPriceByProductId(productMerchant1.getProductId()));
+        PMDTOForSearch.setHighestPrice(productMerchantService.maxPriceByProductId(productMerchant1.getProductId()));
+        ResponseEntity responseEntity = restTemplate.postForObject(uri, PMDTOForSearch, ResponseEntity.class);
+
         return new ResponseEntity<String>(productMerchant1.getProductMerchantId(),HttpStatus.CREATED);
     }
     @CrossOrigin("*")
@@ -152,7 +163,30 @@ public class ProductMerchantController {
     @CrossOrigin("*")
     @RequestMapping(value = "/delete{productMerchantId}", method = RequestMethod.DELETE)
     public void deleteProductMerchant(@PathVariable("productMerchantId") String productMerchantId){
+        ProductMerchant productMerchant = findOneProductMerchant(productMerchantId).getBody();
+        System.out.println(productMerchant);
         productMerchantService.delete(productMerchantId);
+
+        //API CALL TO SEARCH
+
+        final String uri="http://localhost:8080/product/updateProductPricing";
+        //final String uri = "http://demo2494511.mockable.io/testing";
+        RestTemplate restTemplate = new RestTemplate();
+        PMDTOForSearch pmdtoForSearch = new PMDTOForSearch();
+        pmdtoForSearch.setProductId(productMerchant.getProductId());
+        pmdtoForSearch.setOption(-1);
+        try {
+            pmdtoForSearch.setLowestPrice(productMerchantService.minPriceByProductId(productMerchant.getProductId()));
+            pmdtoForSearch.setHighestPrice(productMerchantService.maxPriceByProductId(productMerchant.getProductId()));
+        }
+        catch (Exception e){
+            pmdtoForSearch.setHighestPrice(0);
+            pmdtoForSearch.setLowestPrice(0);
+        }
+        finally {
+            System.out.println(pmdtoForSearch.getHighestPrice() + " " + pmdtoForSearch.getLowestPrice());
+            ResponseEntity responseEntity = restTemplate.postForObject(uri, pmdtoForSearch, ResponseEntity.class);
+        }
     }
 
     @CrossOrigin("*")
@@ -169,6 +203,17 @@ public class ProductMerchantController {
         Merchant merchant = merchantService.findOne(productMerchantDTO.getMerchant().getMerchantId());
         productMerchant.setMerchant(merchant);
         ProductMerchant productMerchant1= productMerchantService.save(productMerchant);
+
+        //API CALL TO SEARCH
+        final String uri="http://localhost:8080/product/updateProductPricing";
+        RestTemplate restTemplate = new RestTemplate();
+        PMDTOForSearch PMDTOForSearch = new PMDTOForSearch();
+        BeanUtils.copyProperties(productMerchant1, PMDTOForSearch);
+        PMDTOForSearch.setOption(0);
+        PMDTOForSearch.setLowestPrice(productMerchantService.minPriceByProductId(productMerchant1.getProductId()));
+        PMDTOForSearch.setHighestPrice(productMerchantService.maxPriceByProductId(productMerchant1.getProductId()));
+        ResponseEntity responseEntity = restTemplate.postForObject(uri, PMDTOForSearch, ResponseEntity.class);
+
         return new ResponseEntity<String>(productMerchant1.getProductMerchantId(),HttpStatus.CREATED);
     }
 }

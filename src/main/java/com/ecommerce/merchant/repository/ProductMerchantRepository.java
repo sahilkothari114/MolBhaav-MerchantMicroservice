@@ -30,7 +30,7 @@ public interface ProductMerchantRepository extends CrudRepository<ProductMerchan
 //    public List<GroupByProductId> groupByProductId();
 
     @Query("SELECT NEW com.ecommerce.merchant.DTO.algorithm.GroupByMerchantId(" +
-            "pm.merchant.merchantId, COUNT(pm.productId), AVG(pm.rating))" +
+            "pm.merchant.merchantId, COUNT(pm.productId), AVG(pm.rating/pm.ratingCount))" +
             " FROM ProductMerchant pm GROUP BY pm.merchant.merchantId")
     public List<GroupByMerchantId> groupingByMerchant();
 
